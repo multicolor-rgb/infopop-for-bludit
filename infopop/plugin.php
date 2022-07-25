@@ -60,10 +60,10 @@ echo'<img src="'.$this->domainPath().'img/close.svg" class="toper-close" style="
     
         
         <p>Width</p>
-        <input type='text' name='width' class='form-control' value='".$this->getValue('width')."'>
+        <input type='text' name='width' placeholder='example: 100px or 100%' class='form-control' value='".$this->getValue('width')."'>
 <br>
         <p>Height</p>
-        <input type='text' name='height' class='form-control' value='".$this->getValue('height')."'>
+        <input type='text' name='height' placeholder='example: 100px or 100%' class='form-control' value='".$this->getValue('height')."'>
 <br>
         <p>Background</p>
         <input name='color' type='color' class='form-control form-color' value='".$this->getValue('color')."'>
