@@ -1,0 +1,62 @@
+.bulb-content {
+    font-size: 14px;
+    box-shadow: 1px 1px 10px rgba(0, 0, 0, 0.3);
+    border-radius: 10px;
+    z-index: 999;
+    color: #fff;
+    padding: 20px;
+    text-align: center;
+    animation: 250ms fadeInLefter ease-in-out;
+    z-index: 999;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    padding-top: 45px;
+
+}
+
+@media(max-width:992px) {
+    .bulb-content {
+        width: 100% !important;
+        height: auto !important;
+        position: fixed;
+        bottom: 0;
+        left: 0;
+
+    }
+}
+
+@keyframes fadeInLefter {
+    from {
+        opacity: 0;
+    
+    }
+
+    to {
+        opacity: 1;
+      
+    }
+}
+
+.bulb-content .toper-close {
+    position: absolute;
+    right: 5px;
+    top: 5px;
+    font-size: 1.2rem;
+
+    cursor: pointer;
+}
+
+.bulb-content p {
+    font-size: 0.8rem;
+}
+
+.bulb-content b {
+    font-size: 0.9rem
+}
+
+.bulb-content a {
+    text-decoration: underline;
+    color: #fff;
+}

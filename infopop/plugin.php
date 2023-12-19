@@ -1,56 +1,87 @@
 <?php
-    class infoPop extends Plugin {
-       
-        public function init()
+class infoPop extends Plugin
+{
+
+    public function init()
     {
 
         $this->dbFields = array(
-			'color'=>'',
-		'width'=>'',
-		'height'=>'',
-		'content'=>'',
-     'position'=>'',
-     'fontcolor'=>'',
-     'show'=>'',
-		);
-
-
-   
+            'color' => '',
+            'width' => '',
+            'height' => '',
+            'content' => '',
+            'position' => '',
+            'fontcolor' => '',
+            'transparent' => '',
+            'show' => '',
+        );
     }
 
 
-    public function siteBodyBegin(){
-  
-        if($this->getValue('position')=='bottomleft'){
-            echo '<link rel="stylesheet" href="'.$this->domainPath().'css/infopopleft.css?v=1">';
-        }elseif($this->getValue('position')=='bottomright'){
-            echo '<link rel="stylesheet" href="'.$this->domainPath().'css/infopopright.css?v=2">';
-       
+    public function siteBodyBegin()
+    {
+
+        function hex2rgb($hex)
+        {
+            // Remove the hash if it exists
+            $hex = str_replace('#', '', $hex);
+
+            // Make sure the hex code is valid
+            if (ctype_xdigit($hex) && (strlen($hex) == 6 || strlen($hex) == 3)) {
+                // If it's a 3-character hex code, expand it to 6 characters
+                if (strlen($hex) == 3) {
+                    $hex = str_repeat(substr($hex, 0, 1), 2) . str_repeat(substr($hex, 1, 1), 2) . str_repeat(substr($hex, 2, 1), 2);
+                }
+
+                // Convert hex to RGB
+                $rgb = array(
+                    'r' => hexdec(substr($hex, 0, 2)),
+                    'g' => hexdec(substr($hex, 2, 2)),
+                    'b' => hexdec(substr($hex, 4, 2))
+                );
+
+                return $rgb;
+            } else {
+                // Invalid hex code
+                return false;
+            }
         }
-   
-        echo'<div class="bulb-content" style="width:'.$this->getValue('width').';height:'.$this->getValue('height').';background:'.$this->getValue('color').';color:'.$this->getValue('fontcolor').'">';
-echo'<img src="'.$this->domainPath().'img/close.svg" class="toper-close" style="width:24px;filter:invert(100%);">'.html_entity_decode($this->getValue('content')).'</div>';
 
+
+        if ($this->getValue('position') == 'bottomleft') {
+            echo '<link rel="stylesheet" href="' . $this->domainPath() . 'css/infopopleft.css?v=11">';
+        } elseif ($this->getValue('position') == 'bottomright') {
+            echo '<link rel="stylesheet" href="' . $this->domainPath() . 'css/infopopright.css?v=22">';
+        } elseif ($this->getValue('position') == 'center') {
+            echo '<link rel="stylesheet" href="' . $this->domainPath() . 'css/infopopcenter.css?v=33">';
+        }
+
+        $rgb = hex2rgb($this->getValue('color'));
+
+
+        echo '<div class="bulb-content" style="width:' . $this->getValue('width') . ';height:' . $this->getValue('height') . ';background:rgba(' . $rgb['r'] . ',' . $rgb['g'] . ',' . $rgb['b'] . ','.$this->getValue('transparent') .');color:' . $this->getValue('fontcolor') . '">';
+        echo '<img src="' . $this->domainPath() . 'img/close.svg" class="toper-close" style="width:24px;filter:invert(100%);">' . html_entity_decode($this->getValue('content')) . '</div>';
     }
 
-    public function siteBodyEnd(){
-        echo '<script src="'.$this->domainPath().'/js/infopop.js"></script>';
+    public function siteBodyEnd()
+    {
+        echo '<script src="' . $this->domainPath() . '/js/infopop.js"></script>';
 
 
 
-     if($this->getValue('show')=='no'){
-    
+        if ($this->getValue('show') == 'no') {
+
             echo '<script>if(localStorage.getItem("closeToperForever")!==null){
                 Infopop.style.display="none"}</script>';
         };
-
     }
 
 
- 
 
 
-    public function form(){
+
+    public function form()
+    {
 
 
 
@@ -60,36 +91,40 @@ echo'<img src="'.$this->domainPath().'img/close.svg" class="toper-close" style="
     
         
         <p>Width</p>
-        <input type='text' name='width' placeholder='example: 100px or 100%' class='form-control' value='".$this->getValue('width')."'>
+        <input type='text' name='width' placeholder='example: 100px or 100%' class='form-control' value='" . $this->getValue('width') . "'>
 <br>
         <p>Height</p>
-        <input type='text' name='height' placeholder='example: 100px or 100%' class='form-control' value='".$this->getValue('height')."'>
+        <input type='text' name='height' placeholder='example: 100px or 100%' class='form-control' value='" . $this->getValue('height') . "'>
 <br>
         <p>Background</p>
-        <input name='color' type='color' class='form-control form-color' value='".$this->getValue('color')."'>
+        <input name='color' type='color' class='form-control form-color' value='" . $this->getValue('color') . "'>
+<br>
+        <p>Background Transparent</p>
+        <input name='transparent' type='text' class='form-control form-color' value='" . $this->getValue('transparent') . "' placeholder='0.1 - 1.0'>
         <br>
         <p>Font color</p>
-        <input name='fontcolor' type='color' class='form-control form-color' value='".$this->getValue('fontcolor')."'>
+        <input name='fontcolor' type='color' class='form-control form-color' value='" . $this->getValue('fontcolor') . "'>
 
 
        <br>
         <p>Position Info Pop</p>
         <select name='position'>
-<option value='bottomleft' ".($this->getValue('position')==="bottomleft"?"selected":"").">bottom left</option>
-<option value='bottomright' ".($this->getValue('position')==="bottomright"?"selected":"").">bottom right</option>
+<option value='bottomleft' " . ($this->getValue('position') === "bottomleft" ? "selected" : "") . ">bottom left</option>
+<option value='bottomright' " . ($this->getValue('position') === "bottomright" ? "selected" : "") . ">bottom right</option>
+<option value='center' " . ($this->getValue('position') === "center" ? "selected" : "") . ">center</option>
         </select>
 <br>
         <p>Show after close?</p>
         <select name='show'>
-<option value='yes' ".($this->getValue('show')==="yes"?"selected":"").">yes</option>
-<option value='no' ".($this->getValue('show')==="no"?"selected":"").">no</option>
+<option value='yes' " . ($this->getValue('show') === "yes" ? "selected" : "") . ">yes</option>
+<option value='no' " . ($this->getValue('show') === "no" ? "selected" : "") . ">no</option>
 
         </select>
 <br>
         <p>Content</p>
 
         <textarea name='content' id='jseditor'>
-        ".$this->getValue('content')."
+        " . $this->getValue('content') . "
         </textarea>
 
       
@@ -119,6 +154,7 @@ echo'<img src="'.$this->domainPath().'img/close.svg" class="toper-close" style="
             schema: 'html5',
             statusbar: false,
             menubar:false,
+            height:600,
             branding: false,
             browser_spellcheck: true,
             pagebreak_separator: PAGE_BREAK,
@@ -140,15 +176,8 @@ echo'<img src="'.$this->domainPath().'img/close.svg" class="toper-close" style="
         ";
 
 
-        
+
 
         return $html;
-
     }
-
-
- 
-
-
-    }
-?>
+}
